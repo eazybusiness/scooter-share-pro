@@ -31,7 +31,7 @@
                             <tr>
                                 <th>Scooter:</th>
                                 <td>
-                                    <a href="{{ url_for('scooters.scooter_detail', scooter_id=rental.scooter.id) }}">
+                                    <a href="{{ url_for('web.scooter_detail', scooter_id=rental.scooter.id) }}">
                                         {{ rental.scooter.identifier }} ({{ rental.scooter.model }})
                                     </a>
                                 </td>
@@ -114,10 +114,10 @@
 
                 <div class="mt-4">
                     {% if rental.status == 'active' and current_user.id == rental.user_id %}
-                        <a href="{{ url_for('rentals.end_rental', rental_id=rental.id) }}" class="btn btn-success">
+                        <a href="{{ url_for('web.end_rental', rental_id=rental.id) }}" class="btn btn-success">
                             <i class="bi bi-stop-circle"></i> Ausleihe beenden
                         </a>
-                        <a href="{{ url_for('rentals.cancel_rental', rental_id=rental.id) }}" class="btn btn-danger">
+                        <a href="{{ url_for('web.cancel_rental', rental_id=rental.id) }}" class="btn btn-danger">
                             <i class="bi bi-x-circle"></i> Stornieren
                         </a>
                     {% endif %}
@@ -164,7 +164,7 @@
 <div class="modal fade" id="ratingModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="{{ url_for('rentals.rate_rental', rental_id=rental.id) }}">
+            <form method="POST" action="{{ url_for('web.rate_rental', rental_id=rental.id) }}">
                 <div class="modal-header">
                     <h5 class="modal-title">Ausleihe bewerten</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

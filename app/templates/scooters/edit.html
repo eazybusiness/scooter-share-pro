@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Scooter - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square"></i> Edit Scooter: {{ scooter.model }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('web.edit_scooter', scooter_id=scooter.id) }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="model" class="form-label">Model *</label>
+                                <input type="text" class="form-control" id="model" name="model" 
+                                       value="{{ scooter.model }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="license_plate" class="form-label">License Plate *</label>
+                                <input type="text" class="form-control" id="license_plate" name="license_plate" 
+                                       value="{{ scooter.license_plate }}" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="battery_level" class="form-label">Battery Level (%) *</label>
+                                <input type="number" class="form-control" id="battery_level" name="battery_level" 
+                                       min="0" max="100" value="{{ scooter.battery_level }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="status" class="form-label">Status *</label>
+                                <select class="form-select" id="status" name="status" required>
+                                    <option value="available" {% if scooter.status == 'available' %}selected{% endif %}>Available</option>
+                                    <option value="in_use" {% if scooter.status == 'in_use' %}selected{% endif %}>In Use</option>
+                                    <option value="maintenance" {% if scooter.status == 'maintenance' %}selected{% endif %}>Maintenance</option>
+                                    <option value="out_of_service" {% if scooter.status == 'out_of_service' %}selected{% endif %}>Out of Service</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="latitude" class="form-label">Latitude *</label>
+                                <input type="number" class="form-control" id="latitude" name="latitude" 
+                                       step="0.000001" value="{{ scooter.latitude }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="longitude" class="form-label">Longitude *</label>
+                                <input type="number" class="form-control" id="longitude" name="longitude" 
+                                       step="0.000001" value="{{ scooter.longitude }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="qr_code" class="form-label">QR Code</label>
+                            <input type="text" class="form-control" id="qr_code" name="qr_code" 
+                                   value="{{ scooter.qr_code or '' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3">{{ scooter.notes or '' }}</textarea>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('web.scooter_detail', scooter_id=scooter.id) }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check-circle"></i> Update Scooter
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

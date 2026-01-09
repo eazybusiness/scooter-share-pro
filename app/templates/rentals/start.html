@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Start Rental - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-play-circle"></i> Start Rental
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Scooter Details</h5>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th>Model:</th>
+                                    <td>{{ scooter.model }}</td>
+                                </tr>
+                                <tr>
+                                    <th>License Plate:</th>
+                                    <td>{{ scooter.license_plate }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Battery:</th>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar {% if scooter.battery_level > 50 %}bg-success{% elif scooter.battery_level > 20 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                                 role="progressbar" style="width: {{ scooter.battery_level }}%">
+                                                {{ scooter.battery_level }}%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Location:</th>
+                                    <td>{{ "%.4f"|format(scooter.latitude) }}, {{ "%.4f"|format(scooter.longitude) }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Pricing</h5>
+                            <table class="table table-sm">
+                                <tr>
+                                    <th>Start Fee:</th>
+                                    <td>${{ "%.2f"|format(config.START_FEE) }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Per Minute:</th>
+                                    <td>${{ "%.2f"|format(config.BASE_PRICE_PER_MINUTE) }}</td>
+                                </tr>
+                            </table>
+                            <div class="alert alert-info mt-3">
+                                <i class="bi bi-info-circle"></i> You will be charged when you end the rental.
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('web.start_rental', scooter_id=scooter.id) }}">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="terms" required>
+                                <label class="form-check-label" for="terms">
+                                    I agree to the terms and conditions and confirm that I will use the scooter responsibly.
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('web.available_scooters') }}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Back
+                            </a>
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-play-circle"></i> Start Rental
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

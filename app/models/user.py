@@ -71,6 +71,10 @@ class User(UserMixin, db.Model):
         """Get user's full name"""
         return f"{self.first_name} {self.last_name}"
     
+    def is_customer(self):
+        """Check if user is a customer"""
+        return self.role == 'customer'
+    
     def is_provider(self):
         """Check if user is a provider"""
         return self.role == 'provider'

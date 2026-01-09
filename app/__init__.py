@@ -86,15 +86,12 @@ def create_app(config_name='development'):
     def forbidden_error(error):
         return {'error': 'Forbidden'}, 403
     
-    # Initialize database tables on first request
-    @app.before_request
-    def init_db():
-        """Create database tables if they don't exist"""
-        if not hasattr(app, '_db_initialized'):
-            try:
-                db.create_all()
-                app._db_initialized = True
-            except Exception as e:
-                app.logger.error(f"Database initialization error: {e}")
+    # Initialize database tables immediately after app creation
+    with app.app_context():
+        try:
+            db.create_all()
+            app.logger.info("Database tables created successfully")
+        except Exception as e:
+            app.logger.error(f"Database initialization error: {e}")
     
     return app

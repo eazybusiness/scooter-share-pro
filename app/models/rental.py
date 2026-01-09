@@ -192,14 +192,24 @@ class Rental(db.Model):
             'is_fully_paid': paid_amount >= self.total_cost
         }
     
+    def get_duration_minutes(self):
+        """Get current duration in minutes for active rentals"""
+        if self.status == 'active':
+            # Calculate live duration for active rentals
+            return int((datetime.utcnow() - self.start_time).total_seconds() / 60)
+        else:
+            # Return stored duration for completed/cancelled rentals
+            return self.duration_minutes or 0
+    
     def get_duration_formatted(self):
         """Get formatted duration string"""
-        if self.duration_minutes < 60:
-            return f"{self.duration_minutes} minutes"
+        minutes = self.get_duration_minutes()
+        if minutes < 60:
+            return f"{minutes} minutes"
         else:
-            hours = self.duration_minutes // 60
-            minutes = self.duration_minutes % 60
-            return f"{hours}h {minutes}m"
+            hours = minutes // 60
+            mins = minutes % 60
+            return f"{hours}h {mins}m"
     
     def to_dict(self, include_sensitive=False):
         """Convert rental to dictionary"""

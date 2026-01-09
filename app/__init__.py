@@ -30,8 +30,14 @@ def create_app(config_name):
     mail.init_app(app)
     
     # Configure login manager
-    login_manager.login_view = 'web.auth.login'
+    login_manager.login_view = 'web.login'
     login_manager.login_message = 'Please log in to access this page.'
+    
+    # User loader
+    @login_manager.user_loader
+    def load_user(user_id):
+        from app.models.user import User
+        return User.query.get(int(user_id))
     
     # Register blueprints
     from app.web import bp as web_bp

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="mb-4">Mein Profil</h2>
+        
+        <div class="card shadow mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Persönliche Informationen</h5>
+                
+                <form method="POST" action="{{ url_for('web.profile') }}">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">Vorname</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Nachname</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Mail</label>
+                        <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                        <div class="form-text">E-Mail kann nicht geändert werden</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Telefon</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" value="{{ user.phone or '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Rolle</label>
+                        <input type="text" class="form-control" value="{{ user.role }}" disabled>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Profil aktualisieren</button>
+                    <a href="{{ url_for('web.change_password') }}" class="btn btn-outline-secondary">Passwort ändern</a>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card shadow">
+            <div class="card-body">
+                <h5 class="card-title">Kontoinformationen</h5>
+                <p><strong>Mitglied seit:</strong> {{ user.created_at.strftime('%d.%m.%Y') }}</p>
+                <p><strong>Letzter Login:</strong> {{ user.last_login.strftime('%d.%m.%Y %H:%M') if user.last_login else 'Noch nie' }}</p>
+                <p><strong>Status:</strong> 
+                    {% if user.is_active %}
+                        <span class="badge bg-success">Aktiv</span>
+                    {% else %}
+                        <span class="badge bg-danger">Inaktiv</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

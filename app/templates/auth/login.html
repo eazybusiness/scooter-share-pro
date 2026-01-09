@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Anmelden - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h2 class="text-center mb-4">Anmelden</h2>
+                
+                <form method="POST" action="{{ url_for('web.login') }}">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">E-Mail</label>
+                        <input type="email" class="form-control" id="email" name="email" required autofocus>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Passwort</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">Anmelden</button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <p class="text-center mb-0">
+                    Noch kein Konto? <a href="{{ url_for('web.register') }}">Jetzt registrieren</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

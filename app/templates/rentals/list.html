@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Ausleihen - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Meine Ausleihen</h2>
+
+{% if rentals %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Scooter</th>
+                <th>Start</th>
+                <th>Ende</th>
+                <th>Dauer</th>
+                <th>Kosten</th>
+                <th>Status</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+            <tr>
+                <td>{{ rental.rental_code }}</td>
+                <td>{{ rental.scooter.identifier }}</td>
+                <td>{{ rental.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>{{ rental.end_time.strftime('%d.%m.%Y %H:%M') if rental.end_time else '-' }}</td>
+                <td>{{ rental.duration_minutes if rental.duration_minutes else '-' }} min</td>
+                <td>€{{ "%.2f"|format(rental.total_cost) }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' if rental.status == 'active' else 'secondary' }}">
+                        {{ rental.status }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{{ url_for('web.rental_detail', rental_id=rental.id) }}" class="btn btn-sm btn-outline-primary">Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">
+    Noch keine Ausleihen vorhanden.
+</div>
+<a href="{{ url_for('web.available_scooters') }}" class="btn btn-primary">Scooter ausleihen</a>
+{% endif %}
+{% endblock %}

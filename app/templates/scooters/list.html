@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Scooter - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Scooter</h2>
+    {% if current_user.can_manage_scooters() %}
+    <a href="{{ url_for('web.create_scooter') }}" class="btn btn-primary">Neuen Scooter hinzufügen</a>
+    {% endif %}
+</div>
+
+{% if scooters %}
+<div class="row">
+    {% for scooter in scooters %}
+    <div class="col-md-4 mb-4">
+        <div class="card shadow h-100">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h5 class="card-title mb-0">{{ scooter.identifier }}</h5>
+                    <span class="badge bg-{{ 'success' if scooter.status == 'available' else 'warning' if scooter.status == 'maintenance' else 'primary' }}">
+                        {{ scooter.status }}
+                    </span>
+                </div>
+                
+                <p class="card-text">
+                    <strong>Modell:</strong> {{ scooter.model }}<br>
+                    <strong>Marke:</strong> {{ scooter.brand }}<br>
+                    <strong>Batterie:</strong> {{ scooter.battery_level }}%
+                </p>
+                
+                <div class="progress mb-3" style="height: 10px;">
+                    <div class="progress-bar bg-{{ 'success' if scooter.battery_level > 50 else 'warning' if scooter.battery_level > 20 else 'danger' }}" 
+                         role="progressbar" 
+                         style="width: {{ scooter.battery_level }}%">
+                    </div>
+                </div>
+                
+                {% if scooter.address %}
+                <p class="text-muted small">
+                    <i class="bi bi-geo-alt"></i> {{ scooter.address }}
+                </p>
+                {% endif %}
+                
+                <a href="{{ url_for('web.scooter_detail', scooter_id=scooter.id) }}" class="btn btn-outline-primary btn-sm">Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    Keine Scooter gefunden.
+</div>
+{% endif %}
+{% endblock %}

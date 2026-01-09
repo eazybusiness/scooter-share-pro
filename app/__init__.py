@@ -17,10 +17,12 @@ jwt = JWTManager()
 login_manager = LoginManager()
 mail = Mail()
 
-def create_app(config_name):
+def create_app(config_name='development'):
     """Application factory pattern"""
+    from config import config as config_dict
+    
     app = Flask(__name__)
-    app.config.from_object(f'config.{config_name.title()}Config')
+    app.config.from_object(config_dict[config_name])
     
     # Initialize extensions
     db.init_app(app)

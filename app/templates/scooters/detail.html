@@ -104,13 +104,13 @@
 
                 <div class="mt-4">
                     {% if current_user.is_customer() and scooter.is_available() %}
-                        <a href="{{ url_for('rentals.start_rental', scooter_id=scooter.id) }}" class="btn btn-primary">
+                        <a href="{{ url_for('web.start_rental', scooter_id=scooter.id) }}" class="btn btn-primary">
                             <i class="bi bi-play-circle"></i> Ausleihe starten
                         </a>
                     {% endif %}
                     
                     {% if current_user.can_manage_scooters() %}
-                        <a href="{{ url_for('scooters.edit_scooter', scooter_id=scooter.id) }}" class="btn btn-warning">
+                        <a href="{{ url_for('web.edit_scooter', scooter_id=scooter.id) }}" class="btn btn-warning">
                             <i class="bi bi-pencil"></i> Bearbeiten
                         </a>
                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
@@ -118,7 +118,7 @@
                         </button>
                     {% endif %}
                     
-                    <a href="{{ url_for('scooters.list_scooters') }}" class="btn btn-secondary">
+                    <a href="{{ url_for('web.scooters_list') }}" class="btn btn-secondary">
                         <i class="bi bi-arrow-left"></i> Zurück
                     </a>
                 </div>
@@ -160,7 +160,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
-                <form method="POST" action="{{ url_for('scooters.delete_scooter', scooter_id=scooter.id) }}" style="display: inline;">
+                <form method="POST" action="{{ url_for('web.delete_scooter', scooter_id=scooter.id) }}" style="display: inline;">
                     <button type="submit" class="btn btn-danger">Löschen</button>
                 </form>
             </div>

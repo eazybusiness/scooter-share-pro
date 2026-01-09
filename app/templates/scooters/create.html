@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Add New Scooter - ScooterShare Pro{% endblock %}
+{% block title %}Neuen Scooter hinzufügen - ScooterShare Pro{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -9,48 +9,48 @@
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h4 class="mb-0">
-                        <i class="bi bi-plus-circle"></i> Add New Scooter
+                        <i class="bi bi-plus-circle"></i> Neuen Scooter hinzufügen
                     </h4>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('web.create_scooter') }}">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="model" class="form-label">Model *</label>
+                                <label for="model" class="form-label">Modell *</label>
                                 <input type="text" class="form-control" id="model" name="model" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="license_plate" class="form-label">License Plate *</label>
+                                <label for="license_plate" class="form-label">Kennzeichen *</label>
                                 <input type="text" class="form-control" id="license_plate" name="license_plate" required>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="battery_level" class="form-label">Battery Level (%) *</label>
+                                <label for="battery_level" class="form-label">Batteriestand (%) *</label>
                                 <input type="number" class="form-control" id="battery_level" name="battery_level" 
                                        min="0" max="100" value="100" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="status" class="form-label">Status *</label>
                                 <select class="form-select" id="status" name="status" required>
-                                    <option value="available">Available</option>
-                                    <option value="in_use">In Use</option>
-                                    <option value="maintenance">Maintenance</option>
-                                    <option value="out_of_service">Out of Service</option>
+                                    <option value="available">Verfügbar</option>
+                                    <option value="in_use">In Benutzung</option>
+                                    <option value="maintenance">Wartung</option>
+                                    <option value="out_of_service">Außer Betrieb</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="latitude" class="form-label">Latitude *</label>
+                                <label for="latitude" class="form-label">Breitengrad *</label>
                                 <input type="number" class="form-control" id="latitude" name="latitude" 
                                        step="0.000001" required>
                                 <small class="text-muted">Example: 50.9375</small>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="longitude" class="form-label">Longitude *</label>
+                                <label for="longitude" class="form-label">Längengrad *</label>
                                 <input type="number" class="form-control" id="longitude" name="longitude" 
                                        step="0.000001" required>
                                 <small class="text-muted">Example: 6.9603</small>
@@ -58,22 +58,22 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="qr_code" class="form-label">QR Code</label>
+                            <label for="qr_code" class="form-label">QR-Code</label>
                             <input type="text" class="form-control" id="qr_code" name="qr_code">
-                            <small class="text-muted">Leave empty to auto-generate</small>
+                            <small class="text-muted">Leer lassen für automatische Generierung</small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="notes" class="form-label">Notes</label>
+                            <label for="notes" class="form-label">Notizen</label>
                             <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
                         </div>
 
                         <div class="d-flex justify-content-between">
                             <a href="{{ url_for('web.scooters_list') }}" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> Cancel
+                                <i class="bi bi-arrow-left"></i> Abbrechen
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle"></i> Create Scooter
+                                <i class="bi bi-check-circle"></i> Scooter erstellen
                             </button>
                         </div>
                     </form>

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Scooter Details - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4>Scooter Details: {{ scooter.identifier }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h5>Grundinformationen</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Modell:</th>
+                                <td>{{ scooter.model }}</td>
+                            </tr>
+                            <tr>
+                                <th>Marke:</th>
+                                <td>{{ scooter.brand }}</td>
+                            </tr>
+                            <tr>
+                                <th>Kennung:</th>
+                                <td><code>{{ scooter.identifier }}</code></td>
+                            </tr>
+                            <tr>
+                                <th>QR-Code:</th>
+                                <td><code>{{ scooter.qr_code }}</code></td>
+                            </tr>
+                            <tr>
+                                <th>Status:</th>
+                                <td>
+                                    {% if scooter.status == 'available' %}
+                                        <span class="badge bg-success">Verfügbar</span>
+                                    {% elif scooter.status == 'in_use' %}
+                                        <span class="badge bg-warning">In Benutzung</span>
+                                    {% elif scooter.status == 'maintenance' %}
+                                        <span class="badge bg-danger">Wartung</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Offline</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Batteriestand:</th>
+                                <td>
+                                    <div class="progress">
+                                        <div class="progress-bar {% if scooter.battery_level > 50 %}bg-success{% elif scooter.battery_level > 20 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                             style="width: {{ scooter.battery_level }}%">
+                                            {{ scooter.battery_level }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Technische Daten</h5>
+                        <table class="table table-sm">
+                            <tr>
+                                <th>Max. Geschwindigkeit:</th>
+                                <td>{{ scooter.max_speed }} km/h</td>
+                            </tr>
+                            <tr>
+                                <th>Reichweite:</th>
+                                <td>{{ scooter.range_km }} km</td>
+                            </tr>
+                            <tr>
+                                <th>Anbieter:</th>
+                                <td>{{ scooter.provider.get_full_name() }}</td>
+                            </tr>
+                            <tr>
+                                <th>Erstellt am:</th>
+                                <td>{{ scooter.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                            </tr>
+                            <tr>
+                                <th>Letzte Wartung:</th>
+                                <td>
+                                    {% if scooter.last_maintenance %}
+                                        {{ scooter.last_maintenance.strftime('%d.%m.%Y') }}
+                                    {% else %}
+                                        Keine Wartung erfasst
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <h5>Standort</h5>
+                <table class="table table-sm">
+                    <tr>
+                        <th>Adresse:</th>
+                        <td>{{ scooter.address or 'Nicht verfügbar' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Koordinaten:</th>
+                        <td>{{ scooter.latitude }}, {{ scooter.longitude }}</td>
+                    </tr>
+                </table>
+
+                <div class="mt-4">
+                    {% if current_user.is_customer() and scooter.is_available() %}
+                        <a href="{{ url_for('rentals.start_rental', scooter_id=scooter.id) }}" class="btn btn-primary">
+                            <i class="bi bi-play-circle"></i> Ausleihe starten
+                        </a>
+                    {% endif %}
+                    
+                    {% if current_user.can_manage_scooters() %}
+                        <a href="{{ url_for('scooters.edit_scooter', scooter_id=scooter.id) }}" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Bearbeiten
+                        </a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="bi bi-trash"></i> Löschen
+                        </button>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('scooters.list_scooters') }}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Zurück
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>Statistiken</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Gesamtumsatz:</strong> {{ "%.2f"|format(scooter.get_total_revenue()) }} €</p>
+                <p><strong>Auslastung:</strong> {{ "%.1f"|format(scooter.get_utilization_rate()) }}%</p>
+                <p><strong>Anzahl Ausleihen:</strong> {{ scooter.rentals.count() }}</p>
+            </div>
+        </div>
+
+        {% if scooter.needs_maintenance() %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> <strong>Wartung erforderlich!</strong>
+            <p class="mb-0">Dieser Scooter benötigt eine Wartung.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Scooter löschen</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Möchten Sie diesen Scooter wirklich löschen?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                <form method="POST" action="{{ url_for('scooters.delete_scooter', scooter_id=scooter.id) }}" style="display: inline;">
+                    <button type="submit" class="btn btn-danger">Löschen</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

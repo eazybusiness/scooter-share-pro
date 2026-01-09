@@ -111,6 +111,7 @@ class Scooter(db.Model):
         """Calculate total revenue from this scooter"""
         from sqlalchemy import func
         from app.models.payment import Payment
+        from app.models.rental import Rental
         
         result = db.session.query(func.sum(Payment.amount))\
                           .join(Rental, Payment.rental_id == Rental.id)\
@@ -122,6 +123,7 @@ class Scooter(db.Model):
         """Calculate utilization rate for last N days"""
         from datetime import timedelta
         from sqlalchemy import func
+        from app.models.rental import Rental
         
         start_date = datetime.utcnow() - timedelta(days=days)
         

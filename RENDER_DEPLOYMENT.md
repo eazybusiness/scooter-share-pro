@@ -1,40 +1,11 @@
-# Render.com Deployment Guide - ScooterShare Pro
+# Render.com Deployment Guide - ScooterShare Pro (FREE TIER)
 
 ## Prerequisites
 - GitHub account connected to Render.com
 - Repository: https://github.com/eazybusiness/scooter-share-pro
+- **NO payment information required** - 100% Free Tier
 
-## Automatic Deployment (Recommended)
-
-Render.com will automatically detect the `render.yaml` file and set up:
-- PostgreSQL database (free tier)
-- Web service with Python environment
-- Environment variables
-
-### Steps:
-
-1. **Go to Render Dashboard**
-   - Visit: https://dashboard.render.com/
-
-2. **Create New Blueprint**
-   - Click "New +" → "Blueprint"
-   - Connect GitHub repository: `eazybusiness/scooter-share-pro`
-   - Branch: `main`
-   - Render will detect `render.yaml` automatically
-
-3. **Review Configuration**
-   - Service Name: `scooter-share-pro`
-   - Database: `scooter-share-pro-db` (PostgreSQL)
-   - Environment: Production
-   - Auto-deploy: Enabled
-
-4. **Deploy**
-   - Click "Apply"
-   - Wait for deployment (5-10 minutes)
-   - Database will be created automatically
-   - Tables will be created on first run
-
-## Manual Deployment (Alternative)
+## Free Tier Deployment Steps
 
 ### Step 1: Create PostgreSQL Database
 
@@ -65,17 +36,26 @@ Render.com will automatically detect the `render.yaml` file and set up:
 
 ### Step 3: Environment Variables
 
-Add these environment variables in Render dashboard:
+Add these environment variables in Render dashboard (Settings → Environment):
+
+**IMPORTANT**: Use the **Internal Database URL** from Step 1!
 
 ```
 FLASK_APP=run.py
 FLASK_ENV=production
 FLASK_CONFIG=production
-SECRET_KEY=<generate-random-string>
-JWT_SECRET_KEY=<generate-random-string>
-DATABASE_URL=<paste-internal-database-url>
+SECRET_KEY=your-secret-key-here-change-this
+JWT_SECRET_KEY=your-jwt-secret-key-here-change-this
+DATABASE_URL=<PASTE-INTERNAL-DATABASE-URL-HERE>
 BASE_PRICE_PER_MINUTE=0.25
 START_FEE=1.00
+PYTHON_VERSION=3.11.0
+```
+
+**To generate secure keys**, use Python:
+```python
+import secrets
+print(secrets.token_urlsafe(32))
 ```
 
 ### Step 4: Deploy

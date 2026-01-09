@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Willkommen - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 mb-4">Willkommen bei ScooterShare Pro</h1>
+        <p class="lead mb-4">Die professionelle E-Scooter Verleihplattform für moderne Mobilität</p>
+        
+        <div class="row mt-5">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Einfach mieten</h5>
+                        <p class="card-text">Finden Sie verfügbare E-Scooter in Ihrer Nähe und starten Sie Ihre Fahrt in Sekunden.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Transparent abrechnen</h5>
+                        <p class="card-text">Faire Preise pro Minute. Keine versteckten Kosten.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Sicher unterwegs</h5>
+                        <p class="card-text">Regelmäßig gewartete Scooter für Ihre Sicherheit.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5">
+            <a href="{{ url_for('web.register') }}" class="btn btn-primary btn-lg me-3">Jetzt registrieren</a>
+            <a href="{{ url_for('web.login') }}" class="btn btn-outline-primary btn-lg">Anmelden</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

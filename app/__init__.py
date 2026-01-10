@@ -48,6 +48,9 @@ def create_app(config_name='development'):
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
     
+    # Register API namespaces first
+    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns
+    
     # API documentation
     api = Api(
         app,
@@ -56,9 +59,6 @@ def create_app(config_name='development'):
         description='Enterprise E-Scooter Rental Platform API',
         doc='/api/docs/'
     )
-    
-    # Register API namespaces
-    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns
     
     api.add_namespace(auth_ns, path='/auth')
     api.add_namespace(scooters_ns, path='/scooters')

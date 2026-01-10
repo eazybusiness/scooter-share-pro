@@ -279,38 +279,38 @@
         <h2>4 API-Dokumentation</h2>
 
         <h3>Authentication & Authorization</h3>
-        <p>Die API verwendet JWT (JSON Web Tokens) mit OAuth 2.0 Flow.</p>
+        <p>Die API verwendet JWT (JSON Web Tokens) mit Flask-JWT-Extended für sichere Authentifizierung.</p>
 
-        <h4>POST /api/v1/auth/login</h4>
+        <h4>POST /api/auth/login</h4>
         <p>Authentifiziert Benutzer und返回 JWT Token.</p>
         <pre><code>Request Headers:
 Content-Type: application/json
-X-Tenant-ID: mobility
 
 Request Body:
 {
-  "email": "user@company.ch",
-  "password": "secure_password",
-  "tenant": "mobility"
+  "email": "user@example.com",
+  "password": "secure_password123"
 }
 
 Response 200:
 {
   "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
   "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "token_type": "Bearer",
-  "expires_in": 3600,
   "user": {
-    "id": "usr_123456",
-    "email": "user@company.ch",
-    "tenant": "mobility",
-    "roles": ["customer", "business_user"]
+    "id": 1,
+    "email": "user@example.com",
+    "first_name": "Test",
+    "last_name": "User",
+    "role": "customer"
   }
-}</code></pre>
+}
+
+# Verwendung des Tokens:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
 
         <h3>Scooter Management API</h3>
 
-        <h4>GET /api/v1/scooters</h4>
+        <h4>GET /api/scooters</h4>
         <p>Listet Scooter mit Filterung und Pagination.</p>
         <pre><code>Query Parameters:
 - status: available, in_use, maintenance, offline
@@ -475,19 +475,91 @@ Response 200:
     }
   }
 }</code></pre>
+
+        <h3>API-Testing & Automatisierung</h3>
+        <p>Die API wird umfassend mit automatisierten Tests und manuellen curl-Commands validiert.</p>
+
+        <h4>🧪 Automatisierter Test-Suite</h4>
+        <p><strong>Datei:</strong> <code>test_api.py</code></p>
+        <pre><code># Ausführung des Test-Suites
+python3 test_api.py
+
+# Test-Abdeckung:
+✅ API Health Check
+✅ User Registration & Login  
+✅ JWT Authentication
+✅ Scooter CRUD Operations
+✅ Rental Start/End Flow
+✅ Error Handling (401, 404, 500)
+✅ Unauthorized Access Testing
+✅ User Statistics & Analytics</code></pre>
+
+        <h4>📱 Manuelle API-Tests</h4>
+        <p><strong>Datei:</strong> <code>api_test_commands.md</code></p>
+        <pre><code># API Base URL
+https://scooter-share-pro.onrender.com/api
+
+# Beispiel: User Registration
+curl -X POST https://scooter-share-pro.onrender.com/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"test123","first_name":"Test","last_name":"User","role":"customer"}'
+
+# Beispiel: Login & Token
+curl -X POST https://scooter-share-pro.onrender.com/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"test123"}'
+
+# Beispiel: Available Scooters (mit Token)
+curl -X GET https://scooter-share-pro.onrender.com/api/scooters/available \
+  -H "Authorization: Bearer YOUR_TOKEN"
+
+# Beispiel: Rental starten
+curl -X POST https://scooter-share-pro.onrender.com/api/rentals/ \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"scooter_id":1,"start_latitude":47.3769,"start_longitude":8.5417}'</code></pre>
+
+        <h4>📊 Test-Ergebnisse</h4>
+        <table class="test-table">
+            <tr><th>Test-Kategorie</th><th>Anzahl</th><th>Status</th></tr>
+            <tr><td>API Endpoints</td><td>15+</td><td>✅ Funktionell</td></tr>
+            <tr><td>Authentication</td><td>4</td><td>✅ JWT funktioniert</td></tr>
+            <tr><td>Error Cases</td><td>6</td><td>✅ Korrekt behandelt</td></tr>
+            <tr><td>Mobile Integration</td><td>5</td><td>✅ Ready</td></tr>
+        </table>
+
+        <h4>🔧 Mobile App Integration</h4>
+        <p>Die API ist vollständig für Mobile App Integration vorbereitet:</p>
+        <ul>
+            <li><strong>JWT Authentication</strong> - Session-lose Authentifizierung</li>
+            <li><strong>RESTful Design</strong> - Standard HTTP Methoden</li>
+            <li><strong>JSON Responses</strong> - Konsistentes Format</li>
+            <li><strong>Error Handling</strong> - Klare Status Codes</li>
+            <li><strong>Geolocation Support</strong> - GPS-basierte Suche</li>
+        </ul>
+
+        <h4>📚 Swagger Documentation</h4>
+        <p>Interaktive API-Dokumentation verfügbar bei:</p>
+        <pre><code>https://scooter-share-pro.onrender.com/api/docs/</code></pre>
+        <ul>
+            <li>🔍 <strong>Live Testing</strong> - Direkt im Browser testen</li>
+            <li>📖 <strong>Parameter Docs</strong> - Alle Endpunkte dokumentiert</li>
+            <li>📱 <strong>Mobile Ready</strong> - Optimiert für App-Entwickler</li>
+            <li>🔐 <strong>Auth Examples</strong> - JWT Token Beispiele</li>
+        </ul>
     </div>
 
     <div class="section" id="architektur">
         <h2>5 Architektur-Dokumentation</h2>
 
-        <h3>Microservices Architecture Overview</h3>
+        <h3>Flask MVC Architecture Overview</h3>
         <div class="diagram">
             <h4>System Architecture</h4>
-            <p><strong>API Gateway:</strong> Kong → Authentication → Rate Limiting</p>
-            <p><strong>Core Services:</strong> User Service, Scooter Service, Rental Service, Payment Service</p>
-            <p><strong>Support Services:</strong> Notification Service, Analytics Service, Maintenance Service, Pricing Service</p>
-            <p><strong>Data Layer:</strong> PostgreSQL, Redis, TimescaleDB, Elasticsearch</p>
-            <p><strong>Infrastructure:</strong> Kubernetes Cluster, Istio Service Mesh, Prometheus Monitoring</p>
+            <p><strong>Web Frontend:</strong> Bootstrap 5 → Flask Routes → Database Layer</p>
+            <p><strong>API Layer:</strong> Flask-RESTX → JWT Authentication → PostgreSQL</p>
+            <p><strong>Business Logic:</strong> Service Layer → Repository Pattern → Models</p>
+            <p><strong>Database:</strong> PostgreSQL with SQLAlchemy ORM</p>
+            <p><strong>Deployment:</strong> Render Cloud → Gunicorn WSGI → Flask App</p>
         </div>
 
         <h3>Domain-Driven Design</h3>

@@ -58,10 +58,7 @@ def create_app(config_name='development'):
     )
     
     # Register API namespaces
-    from app.api.auth import auth_ns
-    from app.api.scooters import scooters_ns
-    from app.api.rentals import rentals_ns
-    from app.api.users import users_ns
+    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns
     
     api.add_namespace(auth_ns, path='/auth')
     api.add_namespace(scooters_ns, path='/scooters')

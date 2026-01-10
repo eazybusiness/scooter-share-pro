@@ -130,6 +130,7 @@ class Rental(db.Model):
             self.total_cost = self.base_fee
         else:
             self.total_cost = self.base_fee + (self.duration_minutes * self.per_minute_rate)
+        return self.total_cost
     
     def cancel_rental(self, reason=None):
         """Cancel an active rental"""

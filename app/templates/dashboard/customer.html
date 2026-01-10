@@ -11,7 +11,7 @@
     <p><strong>Scooter:</strong> {{ active_rental.scooter.identifier }} ({{ active_rental.scooter.model }})</p>
     <p><strong>Gestartet:</strong> {{ active_rental.start_time.strftime('%d.%m.%Y %H:%M') }}</p>
     <p><strong>Dauer:</strong> {{ active_rental.get_duration_minutes() }} Minuten</p>
-    <p><strong>Kosten:</strong> €{{ "%.2f"|format(active_rental.calculate_cost()) }}</p>
+    <p><strong>Kosten:</strong> €{{ "%.2f"|format(active_rental.calculate_cost() or 0) }}</p>
     <a href="{{ url_for('web.rental_detail', rental_id=active_rental.id) }}" class="btn btn-primary">Details anzeigen</a>
 </div>
 {% endif %}
@@ -92,7 +92,7 @@
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' }}">{{ rental.status }}</span>
-                                    <br><small>€{{ "%.2f"|format(rental.total_cost) }}</small>
+                                    <br><small>€{{ "%.2f"|format(rental.total_cost or 0) }}</small>
                                 </div>
                             </div>
                         </a>

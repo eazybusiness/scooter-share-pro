@@ -73,7 +73,7 @@
                             </tr>
                             <tr>
                                 <th>Gesamtkosten:</th>
-                                <td><strong>{{ "%.2f"|format(rental.total_cost) }} €</strong></td>
+                                <td><strong>{{ "%.2f"|format(rental.total_cost or 0) }} €</strong></td>
                             </tr>
                         </table>
 

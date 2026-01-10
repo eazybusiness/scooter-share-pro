@@ -114,12 +114,16 @@
 
                 <div class="mt-4">
                     {% if rental.status == 'active' and current_user.id == rental.user_id %}
-                        <a href="{{ url_for('web.end_rental', rental_id=rental.id) }}" class="btn btn-success">
-                            <i class="bi bi-stop-circle"></i> Ausleihe beenden
-                        </a>
-                        <a href="{{ url_for('web.cancel_rental', rental_id=rental.id) }}" class="btn btn-danger">
-                            <i class="bi bi-x-circle"></i> Stornieren
-                        </a>
+                        <form method="POST" action="{{ url_for('web.end_rental', rental_id=rental.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-stop-circle"></i> Ausleihe beenden
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('web.cancel_rental', rental_id=rental.id) }}" style="display: inline; margin-left: 10px;">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> Stornieren
+                            </button>
+                        </form>
                     {% endif %}
                     
                     {% if rental.status == 'completed' and not rental.rating and current_user.id == rental.user_id %}

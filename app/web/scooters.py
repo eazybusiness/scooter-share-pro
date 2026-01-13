@@ -6,6 +6,7 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from app.web import bp
 from app.services.scooter_service import ScooterService
+from app.utils.qr_generator import generate_qr_code_image
 
 scooter_service = ScooterService()
 
@@ -43,7 +44,10 @@ def scooter_detail(scooter_id):
     
     stats = scooter_service.get_scooter_statistics(scooter)
     
-    return render_template('scooters/detail.html', scooter=scooter, stats=stats)
+    # Generate QR code image
+    qr_code_image = generate_qr_code_image(scooter.qr_code)
+    
+    return render_template('scooters/detail.html', scooter=scooter, stats=stats, qr_code_image=qr_code_image)
 
 @bp.route('/scooters/create', methods=['GET', 'POST'])
 @login_required

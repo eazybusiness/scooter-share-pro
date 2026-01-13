@@ -28,7 +28,16 @@
                             </tr>
                             <tr>
                                 <th>QR-Code:</th>
-                                <td><code>{{ scooter.qr_code }}</code></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{ qr_code_image }}" alt="QR Code" class="me-3" style="width: 150px; height: 150px;">
+                                        <div>
+                                            <small class="text-muted">{{ scooter.qr_code }}</small>
+                                            <br>
+                                            <small class="text-success">✓ Scanbar für mobile App</small>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Status:</th>
@@ -49,7 +58,7 @@
                                 <td>
                                     <div class="progress">
                                         <div class="progress-bar {% if scooter.battery_level > 50 %}bg-success{% elif scooter.battery_level > 20 %}bg-warning{% else %}bg-danger{% endif %}" 
-                                             style="width: {{ scooter.battery_level }}%">
+                                             style="width: {{ scooter.battery_level }}%;">
                                             {{ scooter.battery_level }}%
                                         </div>
                                     </div>

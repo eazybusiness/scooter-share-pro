@@ -58,12 +58,24 @@
                                 <td>
                                     <div class="progress">
                                         <div class="progress-bar {% if scooter.battery_level > 50 %}bg-success{% elif scooter.battery_level > 20 %}bg-warning{% else %}bg-danger{% endif %}" 
-                                             style="width: {{ scooter.battery_level }}%;">
+                                             role="progressbar" 
+                                             aria-valuenow="{{ scooter.battery_level }}" 
+                                             aria-valuemin="0" 
+                                             aria-valuemax="100"
+                                             data-width="{{ scooter.battery_level }}">
                                             {{ scooter.battery_level }}%
                                         </div>
                                     </div>
                                 </td>
                             </tr>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var progressBar = document.querySelector('[data-width="{{ scooter.battery_level }}"]');
+                                    if (progressBar) {
+                                        progressBar.style.width = '{{ scooter.battery_level }}%';
+                                    }
+                                });
+                            </script>
                         </table>
                     </div>
                     <div class="col-md-6">

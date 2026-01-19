@@ -153,7 +153,7 @@
                 <h5>Statistiken</h5>
             </div>
             <div class="card-body">
-                <p><strong>Gesamtumsatz:</strong> {{ "%.2f"|format(scooter.get_total_revenue()) }} €</p>
+                <p><strong>Gesamtumsatz:</strong> CHF {{ "%.2f"|format(scooter.get_total_revenue()) }}</p>
                 <p><strong>Auslastung:</strong> {{ "%.1f"|format(scooter.get_utilization_rate()) }}%</p>
                 <p><strong>Anzahl Ausleihen:</strong> {{ scooter.rentals.count() }}</p>
             </div>
@@ -163,6 +163,53 @@
         <div class="alert alert-warning">
             <i class="bi bi-exclamation-triangle"></i> <strong>Wartung erforderlich!</strong>
             <p class="mb-0">Dieser Scooter benötigt eine Wartung.</p>
+        </div>
+        {% endif %}
+
+        <!-- Ratings Section -->
+        {% set rated_rentals = scooter.rentals.filter_by(status='completed').filter(scooter.rentals.model.rating.isnot(None)).all() %}
+        {% if rated_rentals %}
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5>Bewertungen</h5>
+            </div>
+            <div class="card-body">
+                {% set total_rating = rated_rentals|sum(attribute='rating') %}
+                {% set avg_rating = (total_rating / rated_rentals|length)|round(1) %}
+                <div class="mb-3">
+                    <h6>Durchschnitt: {{ avg_rating }} / 5.0</h6>
+                    <div>
+                        {% for i in range(avg_rating|int) %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% endfor %}
+                        {% if avg_rating - avg_rating|int >= 0.5 %}
+                            <i class="bi bi-star-half text-warning"></i>
+                        {% endif %}
+                        {% for i in range(5 - (avg_rating|round|int)) %}
+                            <i class="bi bi-star text-warning"></i>
+                        {% endfor %}
+                        <small class="text-muted">({{ rated_rentals|length }} Bewertungen)</small>
+                    </div>
+                </div>
+                <hr>
+                <h6>Letzte Bewertungen:</h6>
+                {% for rental in rated_rentals[:3] %}
+                <div class="mb-2">
+                    <div>
+                        {% for i in range(rental.rating) %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% endfor %}
+                        {% for i in range(5 - rental.rating) %}
+                            <i class="bi bi-star text-warning"></i>
+                        {% endfor %}
+                    </div>
+                    {% if rental.feedback %}
+                    <small class="text-muted">{{ rental.feedback }}</small>
+                    {% endif %}
+                    <br><small class="text-muted">{{ rental.end_time.strftime('%d.%m.%Y') if rental.end_time else '' }}</small>
+                </div>
+                {% endfor %}
+            </div>
         </div>
         {% endif %}
     </div>

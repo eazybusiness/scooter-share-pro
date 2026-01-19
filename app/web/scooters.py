@@ -13,17 +13,19 @@ scooter_service = ScooterService()
 @bp.route('/scooters')
 @login_required
 def scooters_list():
-    """List all scooters"""
+    """List scooters - providers see their own, customers see available ones"""
     page = request.args.get('page', 1, type=int)
     per_page = 20
     offset = (page - 1) * per_page
     
-    if current_user.is_provider():
+    if current_user.is_provider() or current_user.is_admin():
+        # Providers and admins see their own scooters for management
         scooters = scooter_service.get_scooters_by_provider(current_user.id, limit=per_page)
+        return render_template('scooters/manage.html', scooters=scooters, page=page)
     else:
-        scooters = scooter_service.get_all_scooters(limit=per_page, offset=offset)
-    
-    return render_template('scooters/list.html', scooters=scooters, page=page)
+        # Customers see available scooters for rental
+        scooters = scooter_service.get_available_scooters(limit=per_page)
+        return render_template('scooters/list.html', scooters=scooters, page=page)
 
 @bp.route('/scooters/available')
 @login_required
@@ -105,14 +107,15 @@ def edit_scooter(scooter_id):
     
     if request.method == 'POST':
         update_data = {
-            'identifier': request.form.get('license_plate'),
+            'identifier': request.form.get('identifier'),
             'model': request.form.get('model'),
             'battery_level': int(request.form.get('battery_level')),
             'status': request.form.get('status'),
             'latitude': float(request.form.get('latitude')),
             'longitude': float(request.form.get('longitude')),
-            'qr_code': request.form.get('qr_code'),
-            'notes': request.form.get('notes')
+            'address': request.form.get('address'),
+            'max_speed': int(request.form.get('max_speed')) if request.form.get('max_speed') else None,
+            'range_km': int(request.form.get('range_km')) if request.form.get('range_km') else None
         }
         
         updated_scooter, error = scooter_service.update_scooter(scooter, current_user, **update_data)

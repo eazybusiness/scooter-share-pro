@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Ausleihen - ScooterShare Pro{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Ausleihen meiner Scooter</h2>
+
+{% if rentals %}
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Scooter</th>
+                <th>Kunde</th>
+                <th>Start</th>
+                <th>Ende</th>
+                <th>Dauer</th>
+                <th>Kosten</th>
+                <th>Status</th>
+                <th>Bewertung</th>
+                <th>Aktionen</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for rental in rentals %}
+            <tr>
+                <td><code>{{ rental.rental_code }}</code></td>
+                <td>{{ rental.scooter.identifier }}</td>
+                <td>{{ rental.user.get_full_name() }}</td>
+                <td>{{ rental.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td>{{ rental.end_time.strftime('%d.%m.%Y %H:%M') if rental.end_time else '-' }}</td>
+                <td>{{ rental.duration_minutes if rental.duration_minutes else '-' }} min</td>
+                <td>CHF {{ "%.2f"|format(rental.total_cost or 0) }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' if rental.status == 'active' else 'secondary' }}">
+                        {{ rental.status }}
+                    </span>
+                </td>
+                <td>
+                    {% if rental.rating %}
+                        <div>
+                            {% for i in range(rental.rating) %}
+                                <i class="bi bi-star-fill text-warning"></i>
+                            {% endfor %}
+                            {% for i in range(5 - rental.rating) %}
+                                <i class="bi bi-star text-warning"></i>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <span class="text-muted">-</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ url_for('web.rental_detail', rental_id=rental.id) }}" class="btn btn-sm btn-outline-primary">Details</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Gesamt</h6>
+                    <h3>{{ rentals|length }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Abgeschlossen</h6>
+                    <h3 class="text-success">{{ rentals|selectattr('status', 'equalto', 'completed')|list|length }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Aktiv</h6>
+                    <h3 class="text-primary">{{ rentals|selectattr('status', 'equalto', 'active')|list|length }}</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h6 class="text-muted">Gesamtumsatz</h6>
+                    <h3 class="text-success">CHF {{ "%.2f"|format(rentals|sum(attribute='total_cost')) }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="alert alert-info">
+    Noch keine Ausleihen fur Ihre Scooter vorhanden.
+</div>
+{% endif %}
+{% endblock %}

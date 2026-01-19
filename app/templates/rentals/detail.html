@@ -65,15 +65,15 @@
                         <table class="table table-sm">
                             <tr>
                                 <th>Grundgebühr:</th>
-                                <td>{{ "%.2f"|format(rental.base_fee) }} €</td>
+                                <td>CHF {{ "%.2f"|format(rental.base_fee) }}</td>
                             </tr>
                             <tr>
                                 <th>Preis pro Minute:</th>
-                                <td>{{ "%.2f"|format(rental.per_minute_rate) }} €</td>
+                                <td>CHF {{ "%.2f"|format(rental.per_minute_rate) }}</td>
                             </tr>
                             <tr>
                                 <th>Gesamtkosten:</th>
-                                <td><strong>{{ "%.2f"|format(rental.total_cost or 0) }} €</strong></td>
+                                <td><strong>CHF {{ "%.2f"|format(rental.total_cost or 0) }}</strong></td>
                             </tr>
                         </table>
 
@@ -150,7 +150,7 @@
                 {% for payment in rental.payments %}
                 <div class="mb-2">
                     <p class="mb-1">
-                        <strong>{{ "%.2f"|format(payment.amount) }} €</strong>
+                        <strong>CHF {{ "%.2f"|format(payment.amount) }}</strong>
                         <span class="badge bg-{{ 'success' if payment.status == 'completed' else 'warning' }}">
                             {{ payment.status }}
                         </span>

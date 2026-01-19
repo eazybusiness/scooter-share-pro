@@ -28,7 +28,7 @@
                 <td>{{ rental.start_time.strftime('%d.%m.%Y %H:%M') }}</td>
                 <td>{{ rental.end_time.strftime('%d.%m.%Y %H:%M') if rental.end_time else '-' }}</td>
                 <td>{{ rental.duration_minutes if rental.duration_minutes else '-' }} min</td>
-                <td>€{{ "%.2f"|format(rental.total_cost or 0) }}</td>
+                <td>CHF {{ "%.2f"|format(rental.total_cost or 0) }}</td>
                 <td>
                     <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' if rental.status == 'active' else 'secondary' }}">
                         {{ rental.status }}

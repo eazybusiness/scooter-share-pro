@@ -14,16 +14,21 @@ scooter_service = ScooterService()
 @bp.route('/rentals')
 @login_required
 def rentals_list():
-    """List rentals"""
+    """List rentals - providers see their scooter rentals, customers see their own rentals"""
     page = request.args.get('page', 1, type=int)
     per_page = 20
     
     if current_user.is_admin():
         rentals = rental_service.get_all_rentals(limit=per_page, offset=(page-1)*per_page)
+        return render_template('rentals/list.html', rentals=rentals, page=page)
+    elif current_user.is_provider():
+        # Providers see rentals of their scooters
+        rentals = rental_service.get_provider_rentals(current_user.id, limit=per_page)
+        return render_template('rentals/provider_list.html', rentals=rentals, page=page)
     else:
+        # Customers see their own rentals
         rentals = rental_service.get_user_rentals(current_user.id, limit=per_page)
-    
-    return render_template('rentals/list.html', rentals=rentals, page=page)
+        return render_template('rentals/list.html', rentals=rentals, page=page)
 
 @bp.route('/rentals/<int:rental_id>')
 @login_required

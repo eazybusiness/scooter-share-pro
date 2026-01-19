@@ -98,12 +98,17 @@ class AuthService:
         Update user profile
         Returns: (User, error_message)
         """
-        allowed_fields = ['first_name', 'last_name', 'phone']
+        allowed_fields = ['first_name', 'last_name', 'phone', 'email']
         
         update_data = {k: v for k, v in kwargs.items() if k in allowed_fields}
         
         if not update_data:
             return None, 'No valid fields to update'
+        
+        # Check if email is being changed and if it already exists
+        if 'email' in update_data and update_data['email'] != user.email:
+            if self.user_repo.exists(update_data['email']):
+                return None, 'Email address already in use'
         
         try:
             updated_user = self.user_repo.update(user, **update_data)

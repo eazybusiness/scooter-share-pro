@@ -19,7 +19,7 @@ class Payment(db.Model):
     
     # Payment details
     amount = db.Column(db.Numeric(10, 2), nullable=False)
-    currency = db.Column(db.String(3), default='EUR', nullable=False)
+    currency = db.Column(db.String(3), default='CHF', nullable=False)
     payment_method = db.Column(db.Enum('credit_card', 'paypal', 'bank_transfer', 'cash', 
                                       name='payment_methods'), 
                               nullable=False)

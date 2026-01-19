@@ -89,12 +89,14 @@ def profile():
         first_name = request.form.get('first_name')
         last_name = request.form.get('last_name')
         phone = request.form.get('phone')
+        email = request.form.get('email')
         
         updated_user, error = auth_service.update_profile(
             current_user,
             first_name=first_name,
             last_name=last_name,
-            phone=phone
+            phone=phone,
+            email=email
         )
         
         if error:

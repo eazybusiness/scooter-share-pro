@@ -48,7 +48,7 @@
         <div class="card shadow">
             <div class="card-body text-center">
                 <h5 class="card-title">Gesamtumsatz</h5>
-                <h2 class="text-success">€{{ "%.2f"|format(stats['total_revenue']) }}</h2>
+                <h2 class="text-success">CHF {{ "%.2f"|format(stats['total_revenue']) }}</h2>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' }}">{{ rental.status }}</span>
-                                    <br><small>€{{ "%.2f"|format(rental.total_cost or 0) }}</small>
+                                    <br><small>CHF {{ "%.2f"|format(rental.total_cost or 0) }}</small>
                                 </div>
                             </div>
                         </a>

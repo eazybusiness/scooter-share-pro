@@ -91,12 +91,21 @@ class ScooterService:
             return None, 'Not authorized to update this scooter'
         
         allowed_fields = ['model', 'brand', 'address', 'battery_level', 
-                         'max_speed', 'range_km']
+                         'max_speed', 'range_km', 'identifier', 'status', 
+                         'latitude', 'longitude']
         
-        update_data = {k: v for k, v in kwargs.items() if k in allowed_fields}
+        update_data = {k: v for k, v in kwargs.items() if k in allowed_fields and v is not None}
         
         if not update_data:
             return None, 'No valid fields to update'
+        
+        # Handle status update separately if present
+        if 'status' in update_data:
+            status = update_data.pop('status')
+            try:
+                scooter.set_status(status)
+            except Exception as e:
+                return None, str(e)
         
         try:
             updated_scooter = self.scooter_repo.update(scooter, **update_data)

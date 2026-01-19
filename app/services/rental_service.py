@@ -116,6 +116,20 @@ class RentalService:
         """Get rentals for a scooter"""
         return self.rental_repo.get_by_scooter(scooter_id, limit)
     
+    def get_provider_rentals(self, provider_id: int, limit: int = 100) -> List[Rental]:
+        """Get all rentals for a provider's scooters"""
+        scooters = self.scooter_repo.get_by_provider(provider_id, limit=1000)
+        scooter_ids = [s.id for s in scooters]
+        
+        all_rentals = []
+        for scooter_id in scooter_ids:
+            rentals = self.rental_repo.get_by_scooter(scooter_id, limit=limit)
+            all_rentals.extend(rentals)
+        
+        # Sort by created_at descending
+        all_rentals.sort(key=lambda r: r.created_at, reverse=True)
+        return all_rentals[:limit]
+    
     def get_all_rentals(self, limit: int = 100, offset: int = 0) -> List[Rental]:
         """Get all rentals"""
         return self.rental_repo.get_all(limit, offset)

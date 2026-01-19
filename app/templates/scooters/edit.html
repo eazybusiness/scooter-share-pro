@@ -21,9 +21,9 @@
                                        value="{{ scooter.model }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="license_plate" class="form-label">License Plate *</label>
-                                <input type="text" class="form-control" id="license_plate" name="license_plate" 
-                                       value="{{ scooter.license_plate }}" required>
+                                <label for="identifier" class="form-label">Kennung *</label>
+                                <input type="text" class="form-control" id="identifier" name="identifier" 
+                                       value="{{ scooter.identifier }}" required>
                             </div>
                         </div>
 
@@ -36,10 +36,10 @@
                             <div class="col-md-6 mb-3">
                                 <label for="status" class="form-label">Status *</label>
                                 <select class="form-select" id="status" name="status" required>
-                                    <option value="available" {% if scooter.status == 'available' %}selected{% endif %}>Available</option>
-                                    <option value="in_use" {% if scooter.status == 'in_use' %}selected{% endif %}>In Use</option>
-                                    <option value="maintenance" {% if scooter.status == 'maintenance' %}selected{% endif %}>Maintenance</option>
-                                    <option value="out_of_service" {% if scooter.status == 'out_of_service' %}selected{% endif %}>Out of Service</option>
+                                    <option value="available" {% if scooter.status == 'available' %}selected{% endif %}>Verfugbar</option>
+                                    <option value="in_use" {% if scooter.status == 'in_use' %}selected{% endif %}>In Benutzung</option>
+                                    <option value="maintenance" {% if scooter.status == 'maintenance' %}selected{% endif %}>Wartung</option>
+                                    <option value="offline" {% if scooter.status == 'offline' %}selected{% endif %}>Offline</option>
                                 </select>
                             </div>
                         </div>
@@ -57,15 +57,23 @@
                             </div>
                         </div>
 
-                        <div class="mb-3">
-                            <label for="qr_code" class="form-label">QR Code</label>
-                            <input type="text" class="form-control" id="qr_code" name="qr_code" 
-                                   value="{{ scooter.qr_code or '' }}">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="max_speed" class="form-label">Max. Geschwindigkeit (km/h)</label>
+                                <input type="number" class="form-control" id="max_speed" name="max_speed" 
+                                       value="{{ scooter.max_speed or '' }}">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="range_km" class="form-label">Reichweite (km)</label>
+                                <input type="number" class="form-control" id="range_km" name="range_km" 
+                                       value="{{ scooter.range_km or '' }}">
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="notes" class="form-label">Notes</label>
-                            <textarea class="form-control" id="notes" name="notes" rows="3">{{ scooter.notes or '' }}</textarea>
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="address" name="address" 
+                                   value="{{ scooter.address or '' }}">
                         </div>
 
                         <div class="d-flex justify-content-between">

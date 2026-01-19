@@ -2,11 +2,15 @@
 User API endpoints
 """
 
-from flask import request
+from flask import Blueprint, request
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.auth_service import AuthService
 
+# Flask Blueprint for API routes
+bp = Blueprint('users_api', __name__)
+
+# Flask-RESTX Namespace for documentation
 users_ns = Namespace('users', description='User operations')
 
 auth_service = AuthService()

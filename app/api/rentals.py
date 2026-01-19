@@ -2,12 +2,16 @@
 Rental API endpoints
 """
 
-from flask import request
+from flask import Blueprint, request
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app.services.rental_service import RentalService
 from app.services.auth_service import AuthService
 
+# Flask Blueprint for API routes
+bp = Blueprint('rentals_api', __name__)
+
+# Flask-RESTX Namespace for documentation
 rentals_ns = Namespace('rentals', description='Rental operations')
 
 rental_service = RentalService()

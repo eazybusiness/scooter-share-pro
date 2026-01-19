@@ -2,11 +2,15 @@
 Authentication API endpoints
 """
 
-from flask import request
+from flask import Blueprint, request
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from app.services.auth_service import AuthService
 
+# Flask Blueprint for API routes
+bp = Blueprint('auth_api', __name__)
+
+# Flask-RESTX Namespace for documentation
 auth_ns = Namespace('auth', description='Authentication operations')
 
 auth_service = AuthService()
@@ -114,3 +118,53 @@ class CurrentUser(Resource):
             return {'message': 'User not found'}, 404
         
         return user.to_dict(include_sensitive=True)
+
+# Flask routes for API
+@bp.route('/register', methods=['POST'])
+def register():
+    """Register a new user"""
+    data = request.get_json()
+    
+    user, error = auth_service.register_user(
+        email=data.get('email'),
+        password=data.get('password'),
+        first_name=data.get('first_name'),
+        last_name=data.get('last_name'),
+        role=data.get('role', 'customer'),
+        phone=data.get('phone')
+    )
+    
+    if error:
+        return {'message': error}, 400
+    
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+    
+    return {
+        'message': 'User registered successfully',
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+        'user': user.to_dict()
+    }, 201
+
+@bp.route('/login', methods=['POST'])
+def login():
+    """Login with email and password"""
+    data = request.get_json()
+    
+    user, error = auth_service.login_user(
+        email=data.get('email'),
+        password=data.get('password')
+    )
+    
+    if error:
+        return {'message': error}, 401
+    
+    access_token = create_access_token(identity=user.id)
+    refresh_token = create_refresh_token(identity=user.id)
+    
+    return {
+        'access_token': access_token,
+        'refresh_token': refresh_token,
+        'user': user.to_dict()
+    }

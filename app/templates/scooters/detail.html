@@ -167,7 +167,12 @@
         {% endif %}
 
         <!-- Ratings Section -->
-        {% set rated_rentals = scooter.rentals.filter_by(status='completed').filter(scooter.rentals.model.rating.isnot(None)).all() %}
+        {% set rated_rentals = [] %}
+        {% for rental in scooter.rentals %}
+            {% if rental.status == 'completed' and rental.rating is not none %}
+                {% set _ = rated_rentals.append(rental) %}
+            {% endif %}
+        {% endfor %}
         {% if rated_rentals %}
         <div class="card mb-3">
             <div class="card-header">

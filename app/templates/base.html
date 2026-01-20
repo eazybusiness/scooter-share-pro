@@ -21,9 +21,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('web.dashboard') }}">Dashboard</a>
                         </li>
+                        {% if current_user.is_customer() %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('web.available_scooters') }}">Scooter</a>
                         </li>
+                        {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('web.rentals_list') }}">Ausleihen</a>
                         </li>

@@ -85,7 +85,7 @@
                                     <small>{{ scooter.model }} - Batterie: {{ scooter.battery_level }}%</small>
                                 </div>
                                 <span class="badge bg-{{ 'success' if scooter.status == 'available' else 'warning' if scooter.status == 'maintenance' else 'primary' }}">
-                                    {{ scooter.status }}
+                                    {% if scooter.status == 'available' %}Verfugbar{% elif scooter.status == 'in_use' %}In Nutzung{% elif scooter.status == 'maintenance' %}Wartung{% else %}Offline{% endif %}
                                 </span>
                             </div>
                         </a>

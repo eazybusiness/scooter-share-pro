@@ -45,14 +45,34 @@ def admin_dashboard():
 def provider_dashboard():
     """Provider dashboard"""
     scooters = scooter_service.get_scooters_by_provider(current_user.id, limit=100)
-    stats = scooter_service.get_provider_statistics(current_user.id)
     
-    recent_rentals = []
-    for scooter in scooters[:10]:
-        rentals = rental_service.get_scooter_rentals(scooter.id, limit=5)
-        recent_rentals.extend(rentals)
+    # Get all rentals for provider's scooters
+    all_rentals = rental_service.get_provider_rentals(current_user.id, limit=1000)
     
-    recent_rentals = sorted(recent_rentals, key=lambda r: r.created_at, reverse=True)[:10]
+    # Calculate statistics correctly
+    total_scooters = len(scooters)
+    available = len([s for s in scooters if s.status == 'available'])
+    in_use = len([s for s in scooters if s.status == 'in_use'])
+    maintenance = len([s for s in scooters if s.status == 'maintenance'])
+    
+    # Calculate total revenue from rentals (same method as rentals page)
+    total_revenue = sum(rental.total_cost for rental in all_rentals if rental.status == 'completed')
+    
+    # Calculate utilization rate
+    total_minutes_used = sum(rental.duration_minutes for rental in all_rentals if rental.status == 'completed')
+    total_possible_minutes = total_scooters * 30 * 24 * 60  # 30 days per scooter
+    avg_utilization = (total_minutes_used / total_possible_minutes) * 100 if total_possible_minutes > 0 else 0
+    
+    stats = {
+        'total_scooters': total_scooters,
+        'available': available,
+        'in_use': in_use,
+        'maintenance': maintenance,
+        'total_revenue': total_revenue,
+        'average_utilization': avg_utilization
+    }
+    
+    recent_rentals = sorted(all_rentals, key=lambda r: r.created_at, reverse=True)[:10]
     
     return render_template('dashboard/provider.html',
                          scooters=scooters,

@@ -141,10 +141,23 @@ def rate_rental(rental_id):
         flash('You are not authorized to rate this rental.', 'danger')
         return redirect(url_for('web.rental_detail', rental_id=rental_id))
     
-    rating = int(request.form.get('rating'))
+    rating = request.form.get('rating')
     feedback = request.form.get('feedback')
     
-    success, error = rental_service.add_rating(rental_id, rating, feedback)
+    # Debug logging
+    print(f"DEBUG: Rating submission - rental_id={rental_id}, rating={rating}, feedback={feedback}")
+    
+    if not rating:
+        flash('Bitte wählen Sie eine Bewertung.', 'danger')
+        return redirect(url_for('web.rental_detail', rental_id=rental_id))
+    
+    try:
+        rating = int(rating)
+        success, error = rental_service.add_rating(rental_id, rating, feedback)
+    except ValueError as e:
+        print(f"DEBUG: ValueError in rating conversion: {e}")
+        flash('Ungültige Bewertung.', 'danger')
+        return redirect(url_for('web.rental_detail', rental_id=rental_id))
     
     if error:
         flash(error, 'danger')

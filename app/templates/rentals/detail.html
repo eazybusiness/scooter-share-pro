@@ -77,6 +77,15 @@
                             </tr>
                         </table>
 
+                        <!-- DEBUG: Rating info -->
+                        <div class="alert alert-secondary mt-3">
+                            <small><strong>DEBUG:</strong><br>
+                            Rating: {{ rental.rating }}<br>
+                            Feedback: {{ rental.feedback }}<br>
+                            Rental ID: {{ rental.id }}
+                            </small>
+                        </div>
+                        
                         {% if rental.rating %}
                         <h5 class="mt-3">Bewertung</h5>
                         <p>

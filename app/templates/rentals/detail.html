@@ -98,15 +98,27 @@
                 <div class="row">
                     <div class="col-md-6">
                         <p><strong>Startpunkt:</strong></p>
-                        <p>{{ rental.start_latitude }}, {{ rental.start_longitude }}</p>
+                        <p>
+                            {% if rental.start_address %}
+                                {{ rental.start_address }}
+                                <br><small class="text-muted">{{ rental.start_latitude }}, {{ rental.start_longitude }}</small>
+                            {% else %}
+                                {{ rental.start_latitude }}, {{ rental.start_longitude }}
+                            {% endif %}
+                        </p>
                     </div>
                     <div class="col-md-6">
                         <p><strong>Endpunkt:</strong></p>
                         <p>
-                            {% if rental.end_latitude %}
-                                {{ rental.end_latitude }}, {{ rental.end_longitude }}
+                            {% if rental.end_address %}
+                                {{ rental.end_address }}
+                                <br><small class="text-muted">{{ rental.end_latitude }}, {{ rental.end_longitude }}</small>
                             {% else %}
-                                Noch nicht beendet
+                                {% if rental.end_latitude %}
+                                    {{ rental.end_latitude }}, {{ rental.end_longitude }}
+                                {% else %}
+                                    <em class="text-muted">Noch nicht beendet</em>
+                                {% endif %}
                             {% endif %}
                         </p>
                     </div>
@@ -114,8 +126,10 @@
 
                 <div class="mt-4">
                     {% if rental.status == 'active' and current_user.id == rental.user_id %}
-                        <form method="POST" action="{{ url_for('web.end_rental', rental_id=rental.id) }}" style="display: inline;">
-                            <button type="submit" class="btn btn-success">
+                        <form method="POST" action="{{ url_for('web.end_rental', rental_id=rental.id) }}" style="display: inline;" id="endRentalForm">
+                            <input type="hidden" name="latitude" id="endLatitude">
+                            <input type="hidden" name="longitude" id="endLongitude">
+                            <button type="submit" class="btn btn-success" onclick="getCurrentLocation()">
                                 <i class="bi bi-stop-circle"></i> Ausleihe beenden
                             </button>
                         </form>
@@ -163,6 +177,31 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+function getCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                document.getElementById('endLatitude').value = position.coords.latitude;
+                document.getElementById('endLongitude').value = position.coords.longitude;
+                // Formular automatisch absenden
+                document.getElementById('endRentalForm').submit();
+            },
+            function(error) {
+                // Wenn Geolocation fehlschlägt, trotzdem mit Standardwerten fortfahren
+                document.getElementById('endLatitude').value = null;
+                document.getElementById('endLongitude').value = null;
+                document.getElementById('endRentalForm').submit();
+            }
+        );
+    } else {
+        // Wenn kein Geolocation unterstützt wird
+        document.getElementById('endRentalForm').submit();
+    }
+    return false; // Verhindert sofortiges Absenden
+}
+</script>
 
 <!-- Rating Modal -->
 <div class="modal fade" id="ratingModal" tabindex="-1">

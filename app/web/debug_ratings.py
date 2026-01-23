@@ -3,12 +3,14 @@ Debug endpoint to check ratings in database
 """
 
 from flask import jsonify, request
+from flask_login import login_required
 from app.web import bp
 from app import db
 from app.models.rental import Rental
 
 
 @bp.route('/debug/ratings')
+@login_required
 def debug_ratings():
     """Debug endpoint to check ratings data"""
     

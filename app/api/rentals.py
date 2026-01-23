@@ -210,6 +210,30 @@ class RateRental(Resource):
         
         return {'message': 'Rating added successfully'}
 
+    @jwt_required()
+    @rentals_ns.response(200, 'Success')
+    @rentals_ns.response(404, 'Rental not found')
+    def get(self, rental_id):
+        """Get rental details including ratings"""
+        current_user_id = get_jwt_identity()
+        
+        rental = rental_service.get_rental_by_id(rental_id)
+        
+        if not rental:
+            return {'message': 'Rental not found'}, 404
+        
+        # Check authorization
+        user = auth_service.get_user_by_id(current_user_id)
+        if not user.is_admin() and rental.user_id != current_user_id:
+            # Providers can see rentals of their scooters
+            if user.is_provider():
+                if rental.scooter.provider_id != current_user_id:
+                    return {'message': 'Not authorized'}, 403
+            else:
+                return {'message': 'Not authorized'}, 403
+        
+        return rental.to_dict(include_sensitive=True)
+
 @rentals_ns.route('/active')
 class ActiveRentals(Resource):
     @jwt_required()

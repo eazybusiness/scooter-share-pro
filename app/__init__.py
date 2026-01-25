@@ -10,12 +10,19 @@ from flask_jwt_extended import JWTManager
 from flask_login import LoginManager
 from flask_mail import Mail
 from flask_restx import Api
+from flask_cors import CORS
+from datetime import datetime
+import pytz
 
 db = SQLAlchemy()
 migrate = Migrate()
 jwt = JWTManager()
 login_manager = LoginManager()
 mail = Mail()
+cors = CORS()
+
+# Define timezone
+timezone = pytz.timezone('Europe/Zurich')
 
 def create_app(config_name='development'):
     """Application factory pattern"""
@@ -30,6 +37,19 @@ def create_app(config_name='development'):
     jwt.init_app(app)
     login_manager.init_app(app)
     mail.init_app(app)
+    cors.init_app(app)
+    api.init_app(app)
+    
+    # Add template filter for local time
+    @app.template_filter('localtime')
+    def localtime_filter(dt):
+        """Convert UTC datetime to local timezone"""
+        if dt is None:
+            return None
+        # Convert UTC to local timezone
+        utc_dt = dt.replace(tzinfo=pytz.UTC)
+        local_dt = utc_dt.astimezone(timezone)
+        return local_dt
     
     # Configure login manager
     login_manager.login_view = 'web.login'

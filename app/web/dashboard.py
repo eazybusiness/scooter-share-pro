@@ -58,10 +58,28 @@ def provider_dashboard():
     # Calculate total revenue from rentals (same method as rentals page)
     total_revenue = sum(rental.total_cost for rental in all_rentals if rental.status == 'completed')
     
-    # Calculate utilization rate
-    total_minutes_used = sum(rental.duration_minutes for rental in all_rentals if rental.status == 'completed')
-    total_possible_minutes = total_scooters * 30 * 24 * 60  # 30 days per scooter
-    avg_utilization = (total_minutes_used / total_possible_minutes) * 100 if total_possible_minutes > 0 else 0
+    # Calculate utilization rate based on actual rental time
+    if all_rentals:
+        # Get date range of rentals
+        from datetime import datetime
+        completed_rentals = [r for r in all_rentals if r.status == 'completed' and r.duration_minutes]
+        
+        if completed_rentals:
+            # Calculate utilization based on actual rental periods
+            total_minutes_used = sum(r.duration_minutes for r in completed_rentals)
+            
+            # Get the time span from first to last rental
+            first_rental = min(completed_rentals, key=lambda r: r.created_at)
+            last_rental = max(completed_rentals, key=lambda r: r.created_at)
+            days_active = (last_rental.created_at - first_rental.created_at).days + 1
+            
+            # Calculate utilization over the active period
+            total_possible_minutes = total_scooters * days_active * 24 * 60
+            avg_utilization = (total_minutes_used / total_possible_minutes) * 100 if total_possible_minutes > 0 else 0
+        else:
+            avg_utilization = 0
+    else:
+        avg_utilization = 0
     
     stats = {
         'total_scooters': total_scooters,

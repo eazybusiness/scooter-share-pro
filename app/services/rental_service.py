@@ -148,21 +148,15 @@ class RentalService:
         Add rating to a completed rental
         Returns: (success, error_message)
         """
-        print(f"DEBUG: Service add_rating called - rental_id={rental_id}, rating={rating}, feedback={feedback}")
-        
         rental = self.rental_repo.get_by_id(rental_id)
         
         if not rental:
-            print(f"DEBUG: Rental not found for id {rental_id}")
             return False, 'Rental not found'
         
         try:
-            print(f"DEBUG: Before add_rating - rental.rating={rental.rating}, rental.feedback={rental.feedback}")
             rental.add_rating(rating, feedback)
-            print(f"DEBUG: After add_rating - rental.rating={rental.rating}, rental.feedback={rental.feedback}")
             return True, None
         except Exception as e:
-            print(f"DEBUG: Exception in add_rating: {e}")
             return False, str(e)
     
     def check_overdue_rentals(self) -> List[Rental]:

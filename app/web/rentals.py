@@ -144,18 +144,18 @@ def rate_rental(rental_id):
     rating = request.form.get('rating')
     feedback = request.form.get('feedback')
     
-    # Debug logging
-    print(f"DEBUG: Rating submission - rental_id={rental_id}, rating={rating}, feedback={feedback}")
-    
     if not rating:
         flash('Bitte wählen Sie eine Bewertung.', 'danger')
         return redirect(url_for('web.rental_detail', rental_id=rental_id))
     
     try:
         rating = int(rating)
+        if not (1 <= rating <= 5):
+            flash('Bewertung muss zwischen 1 und 5 liegen.', 'danger')
+            return redirect(url_for('web.rental_detail', rental_id=rental_id))
+            
         success, error = rental_service.add_rating(rental_id, rating, feedback)
     except ValueError as e:
-        print(f"DEBUG: ValueError in rating conversion: {e}")
         flash('Ungültige Bewertung.', 'danger')
         return redirect(url_for('web.rental_detail', rental_id=rental_id))
     

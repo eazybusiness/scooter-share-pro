@@ -7,20 +7,21 @@ from flask_restx import Api
 
 bp = Blueprint('api', __name__)
 
+# Create API instance and associate with blueprint
+api = Api(
+    bp,
+    version='1.0',
+    title='Scooter Share Pro API',
+    description='Enterprise E-Scooter Rental Platform API',
+    doc='/api/docs/'
+)
+
 # Import and register API routes
 from .auth import auth_ns
 from .scooters import scooters_ns
 from .rentals import rentals_ns
 from .users import users_ns
 from .debug import debug_ns
-
-# Create API instance
-api = Api(
-    version='1.0',
-    title='Scooter Share Pro API',
-    description='Enterprise E-Scooter Rental Platform API',
-    doc='/api/docs/'
-)
 
 # Register all namespaces
 api.add_namespace(auth_ns, path='/auth')

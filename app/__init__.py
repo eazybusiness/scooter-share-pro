@@ -38,7 +38,6 @@ def create_app(config_name='development'):
     login_manager.init_app(app)
     mail.init_app(app)
     cors.init_app(app)
-    api.init_app(app)
     
     # Add template filter for local time
     @app.template_filter('localtime')
@@ -72,7 +71,7 @@ def create_app(config_name='development'):
     from app.api import auth_ns, scooters_ns, rentals_ns, users_ns
     
     # API documentation
-    api = Api(
+    rest_api = Api(
         app,
         version='1.0',
         title='Scooter Share Pro API',
@@ -80,10 +79,10 @@ def create_app(config_name='development'):
         doc='/api/docs/'
     )
     
-    api.add_namespace(auth_ns, path='/auth')
-    api.add_namespace(scooters_ns, path='/scooters')
-    api.add_namespace(rentals_ns, path='/rentals')
-    api.add_namespace(users_ns, path='/users')
+    rest_api.add_namespace(auth_ns, path='/auth')
+    rest_api.add_namespace(scooters_ns, path='/scooters')
+    rest_api.add_namespace(rentals_ns, path='/rentals')
+    rest_api.add_namespace(users_ns, path='/users')
     
     # Error handlers
     @app.errorhandler(404)

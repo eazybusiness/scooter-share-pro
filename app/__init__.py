@@ -68,7 +68,7 @@ def create_app(config_name='development'):
     app.register_blueprint(api_bp, url_prefix='/api')
     
     # Register API namespaces first
-    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns
+    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns, debug_ns
     
     # API documentation
     rest_api = Api(
@@ -83,6 +83,7 @@ def create_app(config_name='development'):
     rest_api.add_namespace(scooters_ns, path='/scooters')
     rest_api.add_namespace(rentals_ns, path='/rentals')
     rest_api.add_namespace(users_ns, path='/users')
+    rest_api.add_namespace(debug_ns, path='/debug')
     
     # Error handlers
     @app.errorhandler(404)

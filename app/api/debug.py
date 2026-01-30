@@ -44,11 +44,19 @@ class RatingDebug(Resource):
             rental_id = request.args.get('rental_id', type=int)
             specific_rental = None
             if rental_id:
-                result = db.session.execute(text("""
-                    SELECT id, rental_code, rating, feedback, status, user_id, scooter_id
-                    FROM rentals
-                    WHERE id = :rental_id AND user_id = :user_id
-                """), {'rental_id': rental_id, 'user_id': current_user_id})
+                # Admins can see any rental, others only their own
+                if current_user_id == 5:  # Admin user
+                    result = db.session.execute(text("""
+                        SELECT id, rental_code, rating, feedback, status, user_id, scooter_id
+                        FROM rentals
+                        WHERE id = :rental_id
+                    """), {'rental_id': rental_id})
+                else:
+                    result = db.session.execute(text("""
+                        SELECT id, rental_code, rating, feedback, status, user_id, scooter_id
+                        FROM rentals
+                        WHERE id = :rental_id AND user_id = :user_id
+                    """), {'rental_id': rental_id, 'user_id': current_user_id})
                 
                 row = result.first()
                 if row:

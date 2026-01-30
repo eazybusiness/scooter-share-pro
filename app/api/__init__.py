@@ -3,20 +3,31 @@ API Blueprint for RESTful endpoints
 """
 
 from flask import Blueprint
+from flask_restx import Api
 
 bp = Blueprint('api', __name__)
 
 # Import and register API routes
-from app.api.auth import bp as auth_bp
-from app.api.scooters import bp as scooters_bp
-from app.api.rentals import bp as rentals_bp
-from app.api.users import bp as users_bp
+from .auth import auth_ns
+from .scooters import scooters_ns
+from .rentals import rentals_ns
+from .users import users_ns
+from .debug import debug_ns
 
-# Register blueprints
-bp.register_blueprint(auth_bp, url_prefix='/auth')
-bp.register_blueprint(scooters_bp, url_prefix='/scooters')
-bp.register_blueprint(rentals_bp, url_prefix='/rentals')
-bp.register_blueprint(users_bp, url_prefix='/users')
+# Create API instance
+api = Api(
+    version='1.0',
+    title='Scooter Share Pro API',
+    description='Enterprise E-Scooter Rental Platform API',
+    doc='/api/docs/'
+)
+
+# Register all namespaces
+api.add_namespace(auth_ns, path='/auth')
+api.add_namespace(scooters_ns, path='/scooters')
+api.add_namespace(rentals_ns, path='/rentals')
+api.add_namespace(users_ns, path='/users')
+api.add_namespace(debug_ns, path='/debug')
 
 from app.api import auth, scooters, rentals, users
 
@@ -25,5 +36,6 @@ from app.api.auth import auth_ns
 from app.api.scooters import scooters_ns
 from app.api.rentals import rentals_ns
 from app.api.users import users_ns
+from app.api.debug import debug_ns
 
-__all__ = ['bp', 'auth_ns', 'scooters_ns', 'rentals_ns', 'users_ns']
+__all__ = ['bp', 'auth_ns', 'scooters_ns', 'rentals_ns', 'users_ns', 'debug_ns']

@@ -77,19 +77,6 @@
                             </tr>
                         </table>
 
-                        <!-- Debug Info -->
-                        <div class="alert alert-info mt-3">
-                            <small>
-                                <strong>Debug Info:</strong><br>
-                                Rental ID: {{ rental.id }}<br>
-                                User ID: {{ rental.user_id }}<br>
-                                Current User ID: {{ current_user.id }}<br>
-                                Rating: {{ rental.rating }} (type: {{ rental.rating|type if rental.rating else 'None' }})<br>
-                                Feedback: {{ rental.feedback if rental.feedback else 'None' }}<br>
-                                Status: {{ rental.status }}
-                            </small>
-                        </div>
-
                         {% if rental.rating %}
                         <h5 class="mt-3">Bewertung</h5>
                         <p>
@@ -102,10 +89,6 @@
                         </p>
                         {% if rental.feedback %}
                             <p class="text-muted">{{ rental.feedback }}</p>
-                        {% endif %}
-                        {% else %}
-                        <h5 class="mt-3">Bewertung</h5>
-                        <p class="text-muted">Keine Bewertung vorhanden (Debug: rating={{ rental.rating }}, type={{ rental.rating|type }})</p>
                         {% endif %}
                         {% elif rental.status == 'completed' and current_user.id == rental.user_id %}
                         <div class="alert alert-info mt-3">

@@ -138,6 +138,9 @@
                                 <i class="bi bi-stop-circle"></i> Ausleihe beenden
                             </button>
                         </form>
+                        <button type="button" class="btn btn-outline-success" onclick="endWithoutLocation()" style="margin-left: 10px;">
+                            <i class="bi bi-geo-alt"></i> Ohne Standort beenden
+                        </button>
                         <form method="POST" action="{{ url_for('web.cancel_rental', rental_id=rental.id) }}" style="display: inline; margin-left: 10px;">
                             <button type="submit" class="btn btn-danger">
                                 <i class="bi bi-x-circle"></i> Stornieren
@@ -205,8 +208,8 @@ function handleEndRental() {
             function(error) {
                 // Fehler - trotzdem ohne Koordinaten fortfahren
                 console.warn('Geolocation Fehler:', error.message);
-                document.getElementById('endLatitude').value = null;
-                document.getElementById('endLongitude').value = null;
+                document.getElementById('endLatitude').value = '';
+                document.getElementById('endLongitude').value = '';
                 
                 // Bestätigung anzeigen
                 if (confirm('Standort konnte nicht ermittelt werden. Trotzdem beenden?')) {
@@ -231,6 +234,15 @@ function handleEndRental() {
             button.innerHTML = originalText;
             button.disabled = false;
         }
+    }
+}
+
+function endWithoutLocation() {
+    if (confirm('Möchten Sie die Ausleihe wirklich ohne Endstandort beenden?')) {
+        // Formular ohne Koordinaten absenden
+        document.getElementById('endLatitude').value = '';
+        document.getElementById('endLongitude').value = '';
+        document.getElementById('endRentalForm').submit();
     }
 }
 </script>

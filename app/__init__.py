@@ -67,24 +67,6 @@ def create_app(config_name='development'):
     from app.api import bp as api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
     
-    # Register API namespaces first
-    from app.api import auth_ns, scooters_ns, rentals_ns, users_ns, debug_ns
-    
-    # API documentation
-    rest_api = Api(
-        app,
-        version='1.0',
-        title='Scooter Share Pro API',
-        description='Enterprise E-Scooter Rental Platform API',
-        doc='/api/docs/'
-    )
-    
-    rest_api.add_namespace(auth_ns, path='/auth')
-    rest_api.add_namespace(scooters_ns, path='/scooters')
-    rest_api.add_namespace(rentals_ns, path='/rentals')
-    rest_api.add_namespace(users_ns, path='/users')
-    rest_api.add_namespace(debug_ns, path='/debug')
-    
     # Error handlers
     @app.errorhandler(404)
     def not_found_error(error):

@@ -29,8 +29,6 @@ api.add_namespace(rentals_ns, path='/rentals')
 api.add_namespace(users_ns, path='/users')
 api.add_namespace(debug_ns, path='/debug')
 
-from app.api import auth, scooters, rentals, users
-
 # Export namespaces for documentation
 from app.api.auth import auth_ns
 from app.api.scooters import scooters_ns

@@ -22,5 +22,4 @@ RUN mkdir -p migrations
 EXPOSE 5000
 
 # Default command (can be overridden in docker-compose)
-# Use $PORT for Render compatibility
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:$PORT", "run:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "run:app"]

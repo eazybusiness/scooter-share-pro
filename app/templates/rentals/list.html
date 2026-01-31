@@ -17,6 +17,7 @@
                 <th>Dauer</th>
                 <th>Kosten</th>
                 <th>Status</th>
+                <th>Bewertung</th>
                 <th>Aktionen</th>
             </tr>
         </thead>
@@ -33,6 +34,20 @@
                     <span class="badge bg-{{ 'success' if rental.status == 'completed' else 'primary' if rental.status == 'active' else 'secondary' }}">
                         {{ rental.status }}
                     </span>
+                </td>
+                <td>
+                    {% if rental.rating %}
+                        {% for i in range(rental.rating) %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% endfor %}
+                        {% for i in range(5 - rental.rating) %}
+                            <i class="bi bi-star text-warning"></i>
+                        {% endfor %}
+                    {% elif rental.status == 'completed' %}
+                        <small class="text-muted">Nicht bewertet</small>
+                    {% else %}
+                        -
+                    {% endif %}
                 </td>
                 <td>
                     <a href="{{ url_for('web.rental_detail', rental_id=rental.id) }}" class="btn btn-sm btn-outline-primary">Details</a>

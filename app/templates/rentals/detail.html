@@ -42,13 +42,13 @@
                             </tr>
                             <tr>
                                 <th>Startzeit:</th>
-                                <td>{{ rental.start_time|localtime|strftime('%d.%m.%Y %H:%M') }}</td>
+                                <td>{{ (rental.start_time|localtime).strftime('%d.%m.%Y %H:%M') if rental.start_time else '-' }}</td>
                             </tr>
                             <tr>
                                 <th>Endzeit:</th>
                                 <td>
                                     {% if rental.end_time %}
-                                        {{ rental.end_time|localtime|strftime('%d.%m.%Y %H:%M') }}
+                                        {{ (rental.end_time|localtime).strftime('%d.%m.%Y %H:%M') }}
                                     {% else %}
                                         Noch aktiv
                                     {% endif %}
@@ -177,7 +177,7 @@
                             {{ payment.status }}
                         </span>
                     </p>
-                    <small class="text-muted">{{ payment.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                    <small class="text-muted">{{ payment.created_at.strftime('%d.%m.%Y %H:%M') if payment.created_at else '-' }}</small>
                 </div>
                 {% endfor %}
             </div>

@@ -184,15 +184,11 @@
                 <div class="mb-3">
                     <h6>Durchschnitt: {{ avg_rating }} / 5.0</h6>
                     <div>
-                        {% for i in range(avg_rating|int) %}
-                            <i class="bi bi-star-fill text-warning"></i>
-                        {% endfor %}
-                        {% if avg_rating - avg_rating|int >= 0.5 %}
-                            <i class="bi bi-star-half text-warning"></i>
-                        {% endif %}
-                        {% for i in range(5 - (avg_rating|round|int)) %}
-                            <i class="bi bi-star text-warning"></i>
-                        {% endfor %}
+                        {% if avg_rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% elif avg_rating >= 0.5 %}<i class="bi bi-star-half text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if avg_rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% elif avg_rating >= 1.5 %}<i class="bi bi-star-half text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if avg_rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% elif avg_rating >= 2.5 %}<i class="bi bi-star-half text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if avg_rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% elif avg_rating >= 3.5 %}<i class="bi bi-star-half text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if avg_rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% elif avg_rating >= 4.5 %}<i class="bi bi-star-half text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
                         <small class="text-muted">({{ rated_rentals|length }} Bewertungen)</small>
                     </div>
                 </div>
@@ -201,12 +197,11 @@
                 {% for rental in rated_rentals[:3] %}
                 <div class="mb-2">
                     <div>
-                        {% for i in range(rental.rating) %}
-                            <i class="bi bi-star-fill text-warning"></i>
-                        {% endfor %}
-                        {% for i in range(5 - rental.rating) %}
-                            <i class="bi bi-star text-warning"></i>
-                        {% endfor %}
+                        {% if rental.rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if rental.rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if rental.rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if rental.rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        {% if rental.rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
                     </div>
                     {% if rental.feedback %}
                     <small class="text-muted">{{ rental.feedback }}</small>

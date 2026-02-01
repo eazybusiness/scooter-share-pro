@@ -37,12 +37,7 @@
                 </td>
                 <td>
                     {% if rental.rating %}
-                        {% for i in range(rental.rating) %}
-                            <i class="bi bi-star-fill text-warning"></i>
-                        {% endfor %}
-                        {% for i in range(5 - rental.rating) %}
-                            <i class="bi bi-star text-warning"></i>
-                        {% endfor %}
+                        {% if rental.rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
                     {% elif rental.status == 'completed' %}
                         <small class="text-muted">Nicht bewertet</small>
                     {% else %}

@@ -80,12 +80,12 @@
                         {% if rental.rating %}
                         <h5 class="mt-3">Bewertung</h5>
                         <p>
-                            {% for i in range(rental.rating) %}
-                                <i class="bi bi-star-fill text-warning"></i>
-                            {% endfor %}
-                            {% for i in range(5 - rental.rating) %}
-                                <i class="bi bi-star text-warning"></i>
-                            {% endfor %}
+                            {% if rental.rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            <small class="text-muted">({{ rental.rating }}/5)</small>
                         </p>
                         {% if rental.feedback %}
                             <p class="text-muted">{{ rental.feedback }}</p>

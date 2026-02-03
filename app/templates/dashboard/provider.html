@@ -56,8 +56,13 @@
     <div class="col-md-6">
         <div class="card shadow">
             <div class="card-body text-center">
-                <h5 class="card-title">Ø Auslastung</h5>
+                <h5 class="card-title">
+                    Ø Auslastung 
+                    <i class="bi bi-info-circle text-muted" data-bs-toggle="tooltip" data-bs-placement="top" 
+                       title="Durchschnittliche Auslastung aller Scooter: Prozentsatz der Zeit, in der Scooter aktiv vermietet sind"></i>
+                </h5>
                 <h2 class="text-info">{{ "%.1f"|format(stats['average_utilization']) }}%</h2>
+                <small class="text-muted">Aktive Mietzeit / Gesamtzeit</small>
             </div>
         </div>
     </div>

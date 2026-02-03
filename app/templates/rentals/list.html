@@ -37,7 +37,13 @@
                 </td>
                 <td>
                     {% if rental.rating %}
-                        {% if rental.rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}{% if rental.rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        <span class="text-nowrap">
+                            {% if rental.rating >= 1 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 2 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 3 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 4 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                            {% if rental.rating >= 5 %}<i class="bi bi-star-fill text-warning"></i>{% else %}<i class="bi bi-star text-warning"></i>{% endif %}
+                        </span>
                     {% elif rental.status == 'completed' %}
                         <small class="text-muted">Nicht bewertet</small>
                     {% else %}
